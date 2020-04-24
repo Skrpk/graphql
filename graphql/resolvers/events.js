@@ -17,7 +17,11 @@ module.exports = {
 
     return events.map(event => transformEvent(event));
   },
-  createEvent: async (args) => {
+  createEvent: async (args, req) => {
+    if (!req.isAuth) {
+      throw new Error('Unauthenticated');
+    }
+
     const event = await db.Event.create({
       title: args.eventInput.title,
       description: args.eventInput.description,
